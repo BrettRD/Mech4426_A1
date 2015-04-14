@@ -1,6 +1,5 @@
 function dynStiff = reStiffness(omega, x)
     dynStiff = real(stiffness(omega, x));
-
 endfunction
 
 

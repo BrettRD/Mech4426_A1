@@ -26,9 +26,16 @@ function [omega, displacement, solnInfo] = systemRoots(count, x)
 			%The fsolve function has all sorts of bullshit reasons to quit. 
 			%if you don't have a solution, go back and do it again!
 			%while (solnInfo(n) == 0)
-			while ((solnInfo(n) == 0)||(solnInfo(n) == 3))
+			%while ((solnInfo(n) == 0)||(solnInfo(n) == 3))
+			while ((solnInfo(n) == 0)||(solnInfo(n) == 2)||(solnInfo(n) == 3))
 			%while (solnInfo(n) != 1)
 				[omega(n), displacement(n), solnInfo(n)] = fsolve(f,omega(n));
+				%the following if throws infinite loops occasionally
+				%if (solnInfo(n) == -3)
+				%	omega(n) = omega(n) - pi;
+				%	solnInfo(n) = 0;
+				%endif
+
 			endwhile
 
 			omBegin = omBegin + omStep;
