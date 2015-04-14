@@ -8,13 +8,16 @@ function [omega, displacement, solnInfo] = systemRoots(count, x)
 	k=x(2);
 
 	omTol = 1;	%tolerance on omega values being the same root
-	omStep = 50;
-	%increase the beginning omega 
+	omStep = 100;
+
 	omega(1:count) = 0;
 	displacement(1:count) = 0;
 	solnInfo(1:count) = 0;
 
+	%increase the beginning omega so we don't wait so long
+	omega(1) = 3000;
 	for n = 2:count
+
 		omBegin = omega(n-1) +1;
 		while (omega(n) < (omega(n-1)+omTol))
 			

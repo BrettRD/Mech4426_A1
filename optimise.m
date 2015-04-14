@@ -1,4 +1,4 @@
-function omega = optimise(x)
+function [L,k,amp] = optimise(L,k)
 	%define the limits on the additional mass
 	L1 = 0.2;
 	Llimit = [0, 2*L1];
@@ -7,37 +7,54 @@ function omega = optimise(x)
 	L=x(1);
 	k=x(2);
 
-	omTol = 1;	%tolerance on omega values being the same root
-	omStep = 10;
-	%increase the beginning omega 
-	omega(1:6) = 0;
-	%w = 1:0.1:100;
-	%REF = [L, k];
-	%f = @(y) stiffness(y,REF); % function of dummy variable y
-	%plot(w, w.^2)
+	Diff(2) = 0;
 
-	for n = 2:6
-		omBegin = omega(n-1) +1
-		while (omega(n) < (omega(n-1)+omTol))
-			
-			%search for a resonant frequncy starting from omBegin
-			REF = [L, k];
-			f = @(y) stiffness(y,REF); % function of dummy variable y
-			omega(n) = fsolve(f,omBegin);
-			%sometimes the fsolve routine runs into NaN results and aborts. Running it again seems to fix that.
-			omega(n) = fsolve(f,omega(n));
+	%exponential L steps
+	Lbound = [5, 12];
+	Lstep = 0.1;
 
-			omBegin = omBegin + omStep;
-		
-			%REF = [L,k];
-			%f = @(y) stiffness(y,REF); % function of dummy variable y
-			%[omega,fval,info]=fsolve(f,y0);
+	%linear k steps
+	kbound = [0, 0.4];
+	kstep = 0.01
 
-		endwhile
+	mostStiff = betaMode2()
 
-	endfor
+	%I don't know
+	bool changed = true;
+
+	while changed
+		%find the second root given L and k
+		%make a small change to L and k, calculate the amplitude of the second mode for each
+		%store the results of those tests as a vector
+		%Use the test results as a step vector?
+		amp = betaM2(L,k);
+		changed = false;
+		plotRoots(4, [L,k]);
+		fflush(stdout);
+
+
+		for ktest = kbound(1):kstep:kbound(2)
+			testStiff = betaM2(L,ktest);
+			if abs(testStiff)>abs(mostStiff)
+				k=ktest;
+				mostStiff = testStiff;
+				changed  = true;
+			endif
+		endfor
+
+		for LtestExp = Lbound(1):Lstep:Lbound(2)
+			Ltest = 10^LtestExp;
+			testStiff = betaM2(Ltest,k);
+			if abs(testStiff)>abs(mostStiff)
+				L=Ltest;
+				mostStiff = testStiff;
+				changed  = true;
+			endif
+		endfor
+
+
+	endwhile
 	
 
-	%Maximise2D(systemBeta(omega[2], L, k))
 
 endfunction
