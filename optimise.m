@@ -1,11 +1,11 @@
-function omega = optimise()
+function omega = optimise(x)
 	%define the limits on the additional mass
 	L1 = 0.2;
 	Llimit = [0, 2*L1];
 
 	%initial conditions for the search
-	L=0.2;
-	k=1;
+	L=x(1);
+	k=x(2);
 
 	omTol = 1;	%tolerance on omega values being the same root
 	omStep = 10;

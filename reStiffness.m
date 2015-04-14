@@ -1,4 +1,4 @@
-function dynStiff = stiffness(omega, x)
+function dynStiff = reStiffness(omega, x)
     L2 = x(1);
     k = x(2);
     omega = real(omega);
@@ -30,7 +30,7 @@ function dynStiff = stiffness(omega, x)
     betaLeft = betaDamper + betaMass;
 
     %sum stiffnesses:
-    dynStiff = (1/(betaRight)) + (1/(betaLeft));
+    dynStiff = real((1/(betaRight)) + (1/(betaLeft)));
 
 
 
