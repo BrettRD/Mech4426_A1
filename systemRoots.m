@@ -1,4 +1,4 @@
-function [omega, displacement] = systemRoots(count, x)
+function [omega, displacement, solnInfo] = systemRoots(count, x)
 	%define the limits on the additional mass
 	L1 = 0.2;
 	Llimit = [0, 2*L1];
@@ -8,15 +8,11 @@ function [omega, displacement] = systemRoots(count, x)
 	k=x(2);
 
 	omTol = 1;	%tolerance on omega values being the same root
-	omStep = 10;
+	omStep = 50;
 	%increase the beginning omega 
 	omega(1:count) = 0;
 	displacement(1:count) = 0;
-
-	%w = 1:0.1:100;
-	%REF = [L, k];
-	%f = @(y) stiffness(y,REF); % function of dummy variable y
-	%plot(w, w.^2)
+	solnInfo(1:count) = 0;
 
 	for n = 2:count
 		omBegin = omega(n-1) +1;
@@ -25,18 +21,24 @@ function [omega, displacement] = systemRoots(count, x)
 			%search for a resonant frequncy starting from omBegin
 			REF = [L, k];
 			f = @(y) reStiffness(y,REF); % function of dummy variable y
-			omega(n) = fsolve(f,omBegin);
-			%sometimes the fsolve routine runs into NaN results and aborts. Running it again seems to fix that.
-			omega(n) = fsolve(f,omega(n));
+			[omega(n), displacement(n), solnInfo(n)] = fsolve(f,omBegin);
+
+			%The fsolve function has all sorts of bullshit reasons to quit. 
+			%if you don't have a solution, go back and do it again!
+			%while (solnInfo(n) == 0)
+			while ((solnInfo(n) == 0)||(solnInfo(n) == 3))
+			%while (solnInfo(n) != 1)
+				[omega(n), displacement(n), solnInfo(n)] = fsolve(f,omega(n));
+			endwhile
 
 			omBegin = omBegin + omStep;
 		
-			%REF = [L,k];
-			%f = @(y) stiffness(y,REF); % function of dummy variable y
-			%[omega,fval,info]=fsolve(f,y0);
-
 		endwhile
+		%the value it fills with automatically doesn't include the complex coefficients
+		%displacement(n) = systemBeta(omega(n), [L,k]);
+		%displacement(n) = systemBeta(omega(n), [L,k]);
 		displacement(n) = stiffness(omega(n), [L,k]);
+
 	endfor
 	
 	%Maximise2D(systemBeta(omega[2], L, k))

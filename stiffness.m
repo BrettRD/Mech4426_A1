@@ -24,13 +24,26 @@ function dynStiff = stiffness(omega, x)
     lamda = rho*(omega^2)/G;
 
     betaDamper = (1/(k*(1+i*alpha)));
-    betaMass = - ((cos(lamda*L2))/(G*J2*lamda*sin(lamda*L2)));
+    betaMass = -(cos(lamda*L2)/(G*J2*lamda*sin(lamda*L2)));
+    
+    betaBar = -(cos(lamda*Lb)/(G*Jb*lamda*sin(lamda*Lb)));
+    
+    betaStub = -(cos(lamda*Lc)/(G*Jc*lamda*sin(lamda*Lc)));
+    betaCross = -1/(G*Jb*lamda*sin(lamda*Lb));
+    betaLeft = betaBar - ((betaCross^2)/(betaStub+betaBar));
+
+    %betaStub = 1/(((G*Jb*lamda*sin(lamda*Lb))^2) * (((cos(lamda*Lb))/((G*Jb*lamda*sin(lamda*Lb))))+((cos(lamda*Lc))/((G*Jc*lamda*sin(lamda*Lc))))) );
+    %betaLeft = betaBar + betaStub;
     %sum receptances
-    betaRight = (cos(lamda*Lb)/(G*Jb*lamda*sin(lamda*Lb))) - 1/(((G*Jb*lamda*sin(lamda*Lb))^2) * (((cos(lamda*Lb))/((G*Jb*lamda*sin(lamda*Lb))))+((cos(lamda*Lc))/((G*Jc*lamda*sin(lamda*Lc))))) );
-    betaLeft = betaDamper + betaMass;
+    
+
+    
+    
+
+    betaRight = betaDamper + betaMass;
 
     %sum stiffnesses:
-    dynStiff = (1/(betaRight)) + (1/(betaLeft));
+    dynStiff = (1/(betaLeft)) + (1/(betaRight));
 
 
 
