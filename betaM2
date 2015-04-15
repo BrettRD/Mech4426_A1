@@ -1,4 +1,0 @@
-function betaMode2 = betaM2(L,k)
-	[w,a] = systemRoots(3, [L,k]);
-	betaMode2 = a(3);
-endfunction
