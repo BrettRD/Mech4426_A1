@@ -4,11 +4,11 @@ function [L,k,mostStiff] = optimise(L,k)
 
 	%exponential L steps
 	kbound = [5, 12];
-	kstep = 0.001;
+	kstep = 0.01;
 	kExp = log10(k);
 	%linear k steps
 	Lbound = [0, 2*L1];
-	Lstep = 0.0001;
+	Lstep = 0.001;
 
 	mostStiff = betaM2(L,k)
 
