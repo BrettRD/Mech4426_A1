@@ -43,9 +43,9 @@ function dynStiff = stiffness(omega, x)
     betaRight = betaDamper + betaMass;
 
     %sum stiffnesses:
-    dynStiff = (1./(betaLeft)) + (1./(betaRight));
-
-
+    dynStiff(3, :) = 1./(betaRight);
+    dynStiff(2, :) = 1./(betaLeft);
+    dynStiff(1,:) = (1./(betaLeft)) + (1./(betaRight));
 
 endfunction
 

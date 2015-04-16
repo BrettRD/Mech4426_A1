@@ -47,7 +47,7 @@ function [omega, displacement, solnInfo] = systemRoots(count, x)
 		%the value it fills with automatically doesn't include the complex coefficients
 		%displacement(n) = systemBeta(omega(n), [L,k]);
 		%displacement(n) = systemBeta(omega(n), [L,k]);
-		displacement(n) = stiffness(omega(n), [L,k]);
+		displacement(n) = stiffness(omega(n), [L,k])(1);
 
 	endfor
 	
