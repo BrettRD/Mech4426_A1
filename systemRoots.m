@@ -1,5 +1,5 @@
 function [omega, resStiffness, solnInfo] = systemRoots(count, x)
-	%define the limits on the additional mass
+	%define the limits on the additional mass and damper
 	L1 = 0.2;
 	Llimit = [0, 2*L1];
 

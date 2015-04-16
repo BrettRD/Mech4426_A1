@@ -1,11 +1,11 @@
 function [L,k,mostStiff] = optimise(L,k)
-
-	%exponential L steps
+	%exponential k steps
 	kbound = [5, 12]; %limit between 10^5 and 10^12
-	%linear k steps
+	%linear L steps
 	L1 = 0.2;
 	Lbound = [0, 2*L1]; % limit between 0 and twice L1
-	
+
+	%initial step sizes
 	Lstep = 0.01;
 	kstep = 0.01;
 
@@ -80,6 +80,5 @@ function [L,k,mostStiff] = optimise(L,k)
 	endwhile
 	%draw the final values
 	plotRoots(4, [L,k]);
-
 
 endfunction

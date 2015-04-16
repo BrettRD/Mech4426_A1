@@ -1,5 +1,4 @@
 function p = plotRoots(count, x)
-
 	%Reference the page, used for printing later
 	h=figure(1);
 
