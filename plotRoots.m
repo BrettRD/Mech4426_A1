@@ -57,7 +57,7 @@ function p = plotRoots(count, x)
 	sp = subplot (2, count-1, [count:2*count-2]);
 	p = get(sp, 'position');
 	p(1) = p(1)-0.1;
-	p(3) = p(3)+0.1;
+	p(3) = p(3)+0.05;
 	set(sp, 'position', p);
 	
 	plot(omega, receptance(1,:), '-r','LineWidth',2, ...
@@ -77,6 +77,7 @@ function p = plotRoots(count, x)
 	set(fontsizes,'FontSize',12);
 
 	l=legend('damped', 'undamped', 'damper');
-	set(l, 'LineWidth',2, 'location', 'northeast');
+	set(l, 'LineWidth',2, 'location', 'northeastoutside');
 
+	print(h,'-dpng','-color','Response.png')
 endfunction
