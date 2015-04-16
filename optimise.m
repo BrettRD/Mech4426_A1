@@ -1,6 +1,4 @@
 function [L,k,mostStiff] = optimise(L,k)
-	%define the limits on the additional mass
-
 
 	%exponential L steps
 	kbound = [5, 12]; %limit between 10^5 and 10^12
@@ -14,7 +12,6 @@ function [L,k,mostStiff] = optimise(L,k)
 	%initial conditions
 	kExp = log10(k);
 	mostStiff = betaM2(L,k);
-
 
 	%Begin the search
 	changed = true;
