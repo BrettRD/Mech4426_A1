@@ -1,4 +1,4 @@
-function [omega, displacement, solnInfo] = systemRoots(count, x)
+function [omega, resStiffness, solnInfo] = systemRoots(count, x)
 	%define the limits on the additional mass
 	L1 = 0.2;
 	Llimit = [0, 2*L1];
@@ -8,14 +8,14 @@ function [omega, displacement, solnInfo] = systemRoots(count, x)
 	k=x(2);
 
 	omTol = 1;	%tolerance on omega values being the same root
-	omStep = 500;
+	omStep = 500; %how large a step to make between initial conditions for fsolve
 
+	%initialise some arrays
 	omega(1:count) = 0;
-	displacement(1:count) = 0;
+	resStiffness(1:count) = 0;
 	solnInfo(1:count) = 0;
 
-	%increase the beginning omega so we don't wait so long
-	omega(1) = 3000;
+	%omega(1) = 3000;  %There's a trivial root at zero, but we can skip ahead
 	for n = 2:count
 
 		omBegin = omega(n-1) +1;
@@ -24,33 +24,24 @@ function [omega, displacement, solnInfo] = systemRoots(count, x)
 			%search for a resonant frequncy starting from omBegin
 			REF = [L, k];
 			f = @(y) reStiffness(y,REF); % function of dummy variable y
-			[omega(n), displacement(n), solnInfo(n)] = fsolve(f,omBegin);
+			[omega(n), resStiffness(n), solnInfo(n)] = fsolve(f,omBegin);
 
-			%The fsolve function has all sorts of bullshit reasons to quit. 
-			%if you don't have a solution, go back and do it again!
-			%while (solnInfo(n) == 0)
-			%while ((solnInfo(n) == 0)||(solnInfo(n) == 3))
+			%only accept solutions that converged neatly
 			while ((solnInfo(n) == 0)||(solnInfo(n) == 2)||(solnInfo(n) == 3))
-			%while (solnInfo(n) != 1)
-				[omega(n), displacement(n), solnInfo(n)] = fsolve(f,omega(n));
-				%the following if throws infinite loops occasionally
+				[omega(n), resStiffness(n), solnInfo(n)] = fsolve(f,omega(n));
+				%the following if rejects fsolve failures, but occasionally causes infinite loops
 				%if (solnInfo(n) == -3)
 				%	omega(n) = omega(n) - pi;
 				%	solnInfo(n) = 0;
 				%endif
-
 			endwhile
 
-			omBegin = omBegin + omStep;
+			omBegin = omBegin + omStep;	%step the initial conditions forward
 		
 		endwhile
-		%the value it fills with automatically doesn't include the complex coefficients
-		%displacement(n) = systemBeta(omega(n), [L,k]);
-		%displacement(n) = systemBeta(omega(n), [L,k]);
-		displacement(n) = stiffness(omega(n), [L,k])(1);
+		%the value it fills with automatically used a trimmed stiffness value
+		resStiffness(n) = stiffness(omega(n), [L,k])(1); %fetch the complex number from the raw stiffness value
 
 	endfor
 	
-	%Maximise2D(systemBeta(omega[2], L, k))
-
 endfunction
