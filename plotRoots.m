@@ -65,7 +65,7 @@ function p = plotRoots(count, x)
 		 omega, receptance(3,:), '-b','LineWidth',2 );
 
 	title('Full system response');
-	xlabel('Omega, (rad/s)');
+	xlabel('Frequency, (rad/s)');
 	ylabel('Receptance (rad/Nm)');
 	axis([Gstartx, Gendx, 0, 1.1*max(receptance(1,:))]);
 

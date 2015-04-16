@@ -4,13 +4,13 @@ function [L,k,mostStiff] = optimise(L,k)
 
 	%exponential L steps
 	kbound = [5, 12];
-	kstep = 0.001;
+	kstep = 0.1;
 	kExp = log10(k);
 	%linear k steps
 	Lbound = [0, 2*L1];
-	Lstep = 0.0001;
+	Lstep = 0.01;
 
-	mostStiff = betaM2(L,k)
+	mostStiff = betaM2(L,k);
 
 	changed = true;
 
@@ -21,11 +21,11 @@ function [L,k,mostStiff] = optimise(L,k)
 		%Use the test results as a step vector?
 		changed = false;
 
-		plotRoots(4, [L,k]);
-		drawnow
+		%plotRoots(4, [L,k]);
+		%drawnow
 		L
 		k
-		fflush(stdout)
+		fflush(stdout);
 
 		Ltest = min(L+Lstep,Lbound(2));
 		testStiff = betaM2(Ltest,k);
@@ -43,14 +43,6 @@ function [L,k,mostStiff] = optimise(L,k)
 			changed  = true;
 		endif
 
-
-
-
-		plotRoots(4, [L,k]);
-		drawnow
-		L
-		k
-		fflush(stdout);
 
 		ktestExp = min(kExp+kstep,kbound(2));
 		ktest = 10^ktestExp;
@@ -72,9 +64,15 @@ function [L,k,mostStiff] = optimise(L,k)
 			changed  = true;
 		endif
 
+		if((changed == false)&&(Lstep > 10^-7))
+			kstep = kstep/2
+			Lstep = Lstep/2
+			changed = true;
+			plotRoots(4, [L,k]);
+		endif
 
 	endwhile
-	
+	plotRoots(4, [L,k]);
 
 
 endfunction

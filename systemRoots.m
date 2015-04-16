@@ -8,7 +8,7 @@ function [omega, displacement, solnInfo] = systemRoots(count, x)
 	k=x(2);
 
 	omTol = 1;	%tolerance on omega values being the same root
-	omStep = 100;
+	omStep = 500;
 
 	omega(1:count) = 0;
 	displacement(1:count) = 0;

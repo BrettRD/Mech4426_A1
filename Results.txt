@@ -1,0 +1,19 @@
+
+
+First Local Maxima found:
+	Damper Length L =  0.11576 m
+	Damper Stiffness k =  1.5631e+09 Nm/rad
+	
+	Mode Frequencies:
+	Mode1:
+		Frequency: 4754.7 rad/s
+		Dynamic Stiffness:  3.2108e+07 Nm/rad
+		Receptance: 3.1145e-08 rad/Nm
+	Mode2:
+		Frequency: 7172.7 rad/s
+		Dynamic Stiffness: 4.5328e+09 Nm/rad
+		Receptance: 2.2061e-10 rad/Nm
+	Mode3:
+		Frequency: 9104.6 rad/s
+		Dynamic Stiffness: 1.1176e+09 Nm/rad
+		Receptance: 8.9477e-10
